@@ -1,0 +1,842 @@
+<!--
+Adı Soyadı: Ceydanur Arslan
+Öğrenci Numarası: 262484066
+
+Adı Soyadı: Sude Yılmaz
+Öğrenci Numarası: 262484068
+-->
+<!DOCTYPE html>
+<html lang="tr">
+
+<head>
+
+<meta charset="UTF-8">
+
+<title>GUESTER - Giriş</title>
+<link rel="icon" type="image/jpeg" href="{{ url_for('static', filename='images/logo.jpeg') }}">
+<link rel="shortcut icon" type="image/jpeg" href="{{ url_for('static', filename='images/logo.jpeg') }}">
+
+<style>
+
+/* =========================
+   GOOGLE FONTS & RESET
+========================= */
+@import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&display=swap');
+
+body {
+    margin: 0;
+    font-family: 'Outfit', sans-serif;
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: relative;
+    overflow: hidden;
+    background-color: #090d16;
+}
+
+/* =========================
+   SLIDESHOW ARKA PLAN
+========================= */
+.slideshow-bg {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: -1;
+    overflow: hidden;
+}
+
+.slide {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    opacity: 0;
+    z-index: 1;
+    transition: opacity 2.5s ease-in-out;
+}
+
+.slide.active {
+    opacity: 1;
+    z-index: 2;
+    animation: kenburns 8s ease-in-out forwards;
+}
+
+.slide.previous {
+    opacity: 0;
+    z-index: 1;
+}
+
+@keyframes kenburns {
+    0% {
+        transform: scale(1);
+    }
+    100% {
+        transform: scale(1.06);
+    }
+}
+
+/* =========================
+   KARARTMA & GLASSMORPHISM OVERLAY
+========================= */
+body::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: radial-gradient(circle at center, rgba(15, 23, 42, 0.45) 0%, rgba(9, 13, 22, 0.85) 100%);
+    backdrop-filter: blur(8px);
+    z-index: 0;
+}
+
+/* =========================
+   GİRİŞ KUTUSU (Lüks Glassmorphism)
+========================= */
+.login-box {
+    width: 400px;
+    padding: 50px 40px;
+    background: rgba(15, 23, 42, 0.75);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border-radius: 28px;
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    box-shadow: 0 30px 60px rgba(0, 0, 0, 0.45), 0 0 100px rgba(124, 58, 237, 0.12);
+    text-align: center;
+    position: relative;
+    z-index: 1;
+    box-sizing: border-box;
+    transition: transform 0.3s ease;
+}
+
+/* =========================
+   LOGO
+========================= */
+.logo {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 25px;
+}
+
+.logo img {
+    width: 130px;
+    height: 130px;
+    object-fit: cover;
+    border-radius: 28px;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3);
+    border: 2px solid rgba(255, 255, 255, 0.15);
+    transition: transform 0.3s ease;
+}
+
+.logo img:hover {
+    transform: scale(1.05);
+}
+
+/* =========================
+   BAŞLIK
+========================= */
+h2 {
+    color: #ffffff;
+    font-size: 22px;
+    font-weight: 800;
+    letter-spacing: 1px;
+    margin-bottom: 30px;
+    text-transform: uppercase;
+}
+
+h3 {
+    color: #ffffff;
+    font-size: 22px;
+    font-weight: 800;
+    letter-spacing: 0.5px;
+    margin-bottom: 15px;
+}
+
+/* =========================
+   INPUT
+========================= */
+input {
+    width: 100%;
+    padding: 15px 18px;
+    margin: 10px 0;
+    background: rgba(30, 41, 59, 0.55);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 14px;
+    color: #ffffff;
+    font-size: 15px;
+    font-weight: 500;
+    box-sizing: border-box;
+    outline: none;
+    transition: all 0.3s ease;
+    font-family: inherit;
+}
+
+input::placeholder {
+    color: #94a3b8;
+}
+
+input:focus {
+    border-color: #a78bfa;
+    background: rgba(15, 23, 42, 0.85);
+    box-shadow: 0 0 0 4px rgba(139, 92, 246, 0.25);
+}
+
+/* =========================
+   BUTON (Logo renklerinde gradyan)
+========================= */
+button {
+    width: 100%;
+    padding: 15px;
+    background: linear-gradient(135deg, #7c3aed 0%, #db2777 100%);
+    color: #ffffff;
+    border: none;
+    border-radius: 14px;
+    font-weight: 700;
+    font-size: 16px;
+    cursor: pointer;
+    margin-top: 15px;
+    box-shadow: 0 6px 20px rgba(139, 92, 246, 0.3);
+    transition: all 0.3s ease;
+    font-family: inherit;
+}
+
+button:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 25px rgba(139, 92, 246, 0.5);
+    filter: brightness(1.1);
+}
+
+button:active {
+    transform: translateY(0);
+}
+
+/* =========================
+   ALT LİNKLER
+========================= */
+.extra-links {
+    margin-top: 25px;
+    font-size: 14px;
+}
+
+.link {
+    color: #cbd5e1;
+    text-decoration: none;
+    font-weight: 600;
+    transition: color 0.2s;
+}
+
+.link:hover {
+    color: #d8b4fe;
+}
+
+.divider {
+    color: rgba(255, 255, 255, 0.2);
+    margin: 0 10px;
+}
+
+/* =========================
+   MODAL
+========================= */
+.modal {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(9, 13, 22, 0.85);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+    justify-content: center;
+    align-items: center;
+    z-index: 999;
+}
+
+/* =========================
+   MODAL KUTUSU
+========================= */
+.modal-box {
+    width: 400px;
+    background: rgba(15, 23, 42, 0.95);
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    padding: 40px;
+    border-radius: 28px;
+    position: relative;
+    box-shadow: 0 30px 60px rgba(0, 0, 0, 0.5), 0 0 100px rgba(124, 58, 237, 0.15);
+    box-sizing: border-box;
+}
+
+/* =========================
+   KAPATMA
+========================= */
+.close {
+    position: absolute;
+    right: 22px;
+    top: 15px;
+    font-size: 28px;
+    color: #94a3b8;
+    cursor: pointer;
+    transition: color 0.2s;
+}
+
+.close:hover {
+    color: #ffffff;
+}
+
+/* =========================
+   MESAJLAR
+========================= */
+.message {
+    margin-top: 20px;
+    font-size: 14px;
+    font-weight: 600;
+    padding: 12px;
+    border-radius: 12px;
+}
+
+.message.success {
+    background: rgba(16, 185, 129, 0.15);
+    color: #34d399;
+    border: 1px solid rgba(16, 185, 129, 0.3);
+}
+
+.message.error {
+    background: rgba(239, 68, 68, 0.15);
+    color: #f87171;
+    border: 1px solid rgba(239, 68, 68, 0.3);
+}
+
+</style>
+
+</head>
+
+<body>
+
+<div class="slideshow-bg">
+    <div class="slide active" style="background-image: url('/static/images/wedding_bg1.jpg');"></div>
+    <div class="slide" style="background-image: url('/static/images/wedding_bg2.jpg');"></div>
+    <div class="slide" style="background-image: url('/static/images/wedding_bg3.jpg');"></div>
+    <div class="slide" style="background-image: url('/static/images/wedding_bg4.jpg');"></div>
+</div>
+
+
+<div class="login-box">
+
+    <!-- LOGO -->
+
+    <div class="logo">
+
+        <img src="/static/images/logo.jpeg" alt="logo">
+
+    </div>
+
+
+    <!-- BAŞLIK -->
+
+    <h2>YÖNETİCİ GİRİŞİ</h2>
+
+
+    <!-- LOGIN -->
+
+    <form action="/login" method="post" autocomplete="off">
+
+        <input type="text"
+               name="ad_soyad"
+               placeholder="Ad Soyad"
+               required
+               autocomplete="off">
+
+        <input type="text"
+               name="sifre"
+               placeholder="Şifre"
+               style="-webkit-text-security: disc;"
+               autocomplete="off">
+
+        <button type="submit">
+
+            Giriş Yap
+
+        </button>
+
+    </form>
+
+
+    <!-- MESAJ -->
+
+    {% if mesaj %}
+
+    <div class="message {{ mesaj_tipi }}">
+
+        {{ mesaj }}
+
+    </div>
+
+    {% endif %}
+
+
+    <!-- ALT LİNKLER -->
+
+    <div class="extra-links">
+
+        <a href="#"
+           class="link"
+           onclick="openForgot()">
+
+            Şifremi Unuttum?
+
+        </a>
+
+        <span class="divider">|</span>
+
+        <a href="#"
+           class="link"
+           onclick="openRegister()">
+
+            Kayıt Ol
+
+        </a>
+
+    </div>
+
+</div>
+
+
+<!-- ŞİFREMİ UNUTTUM -->
+<div id="forgotModal" class="modal">
+    <div class="modal-box">
+        <span class="close" onclick="closeForgot()">&times;</span>
+        <h3 style="margin-bottom: 15px;">Şifre Sıfırla</h3>
+        
+        <!-- Üst Bilgilendirme Kutusu (Alert yerine) -->
+        <div id="forgot-success-msg" style="display: none; background: rgba(16, 185, 129, 0.15); color: #34d399; border: 1px solid rgba(16, 185, 129, 0.3); padding: 10px; border-radius: 12px; font-size: 13px; font-weight: 600; margin-bottom: 15px; text-align: center; line-height: 1.4;"></div>
+        
+        <!-- Step 1: E-posta Girişi -->
+        <div id="forgot-step-1">
+            <p style="font-size: 13px; color: #64748b; margin-bottom: 12px; line-height: 1.4;">
+                Kayıtlı e-posta adresinizi girin. Şifrenizi sıfırlamanız için tek kullanımlık bir kod göndereceğiz.
+            </p>
+            <input type="email" id="forgot-email" placeholder="E-mail Adresi" required>
+            <div id="forgot-error-1" style="color: #ef4444; font-size: 13px; margin: 5px 0; display: none; text-align: left;"></div>
+            <button type="button" onclick="sendResetCode(this)">Sıfırlama Kodu Gönder</button>
+        </div>
+
+        <!-- Step 2: Kod Girişi -->
+        <div id="forgot-step-2" style="display: none;">
+            <p style="font-size: 13px; color: #64748b; margin-bottom: 12px; line-height: 1.4;">
+                Mailinize gelen 6 haneli doğrulama kodunu girin.
+            </p>
+            <input type="text" id="forgot-code" placeholder="6 Haneli Doğrulama Kodu" maxlength="6" required>
+            <div id="forgot-error-2" style="color: #ef4444; font-size: 13px; margin: 5px 0; display: none; text-align: left;"></div>
+            <button type="button" onclick="verifyResetCode(this)">Kodu Doğrula</button>
+            
+            <!-- Tekrar Gönder Sayacı -->
+            <div id="forgot-resend-container" style="margin-top: 15px; text-align: center; font-size: 13px; color: #94a3b8;">
+                <span id="forgot-resend-timer-text">Kodu tekrar göndermek için bekleyin: <span id="forgot-timer-sec" style="font-weight: bold; color: #c084fc;">120</span> sn</span>
+                <button type="button" id="forgot-resend-btn" onclick="triggerResendCode(this)" style="display: none; background: transparent; border: 1px solid rgba(139, 92, 246, 0.4); color: #c084fc; padding: 6px 12px; font-size: 12px; margin: 5px auto 0; cursor: pointer; border-radius: 8px; font-weight: 600; width: auto; box-shadow: none;">Kodu Tekrar Gönder</button>
+            </div>
+        </div>
+
+        <!-- Step 3: Yeni Şifre Belirleme -->
+        <div id="forgot-step-3" style="display: none;">
+            <p style="font-size: 13px; color: #64748b; margin-bottom: 12px; line-height: 1.4;">
+                Lütfen yeni şifrenizi girin.
+            </p>
+            <input type="text" id="forgot-new-pass" placeholder="Yeni Şifre" style="-webkit-text-security: disc;" required>
+            <input type="text" id="forgot-new-pass-confirm" placeholder="Yeni Şifre (Tekrar)" style="-webkit-text-security: disc;" required>
+            <div id="forgot-error-3" style="color: #ef4444; font-size: 13px; margin: 5px 0; display: none; text-align: left;"></div>
+            <button type="button" onclick="resetPassword(this)">Şifreyi Güncelle</button>
+        </div>
+    </div>
+</div>
+
+
+<!-- KAYIT OL -->
+
+<div id="registerModal" class="modal">
+
+    <div class="modal-box">
+
+        <span class="close" onclick="closeRegister()">&times;</span>
+
+        <h3>Kayıt Ol</h3>
+
+        <form action="/register" method="post" autocomplete="off" onsubmit="return validateRegisterForm(event)">
+
+    <input type="text"
+           name="ad_soyad"
+           placeholder="Adınız Soyadınız" required
+           autocomplete="off">
+
+    <input type="text"
+           id="register-password"
+           name="sifre"
+           placeholder="Şifre" required
+           style="-webkit-text-security: disc;"
+           autocomplete="off">
+
+    <input type="email"
+           name="email"
+           placeholder="E-mail Adresi" required
+           autocomplete="off">
+
+    <div id="register-error" style="color: #f87171; font-size: 13.5px; margin: 10px 0; display: none; text-align: left; background: rgba(239, 68, 68, 0.15); border: 1px solid rgba(239, 68, 68, 0.3); padding: 10px; border-radius: 10px;"></div>
+
+    <button type="submit">
+        Kayıt Ol
+    </button>
+
+</form>
+
+    </div>
+
+</div>
+
+
+<script>
+
+let resetEmail = "";
+let resetCode = "";
+
+let resendTimer = null;
+let resendSecondsRemaining = 120;
+
+function startResendTimer() {
+    if (resendTimer) clearInterval(resendTimer);
+    resendSecondsRemaining = 120;
+    
+    const timerText = document.getElementById("forgot-resend-timer-text");
+    const resendBtn = document.getElementById("forgot-resend-btn");
+    const secSpan = document.getElementById("forgot-timer-sec");
+    
+    timerText.style.display = "inline";
+    resendBtn.style.display = "none";
+    secSpan.textContent = resendSecondsRemaining;
+    
+    resendTimer = setInterval(() => {
+        resendSecondsRemaining--;
+        secSpan.textContent = resendSecondsRemaining;
+        
+        if (resendSecondsRemaining <= 0) {
+            clearInterval(resendTimer);
+            resendTimer = null;
+            timerText.style.display = "none";
+            resendBtn.style.display = "block";
+        }
+    }, 1000);
+}
+
+async function triggerResendCode(btn) {
+    const email = document.getElementById("forgot-email").value.trim();
+    if (!email) return;
+    
+    const originalText = btn.textContent;
+    btn.textContent = "Gönderiliyor...";
+    btn.disabled = true;
+    
+    const successMsg = document.getElementById("forgot-success-msg");
+    const errorDiv = document.getElementById("forgot-error-2");
+    errorDiv.style.display = "none";
+    
+    try {
+        const res = await fetch("/forgot-password", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ email: email })
+        });
+        const data = await res.json();
+        
+        if (data.status === "success") {
+            if (data.message.includes("E-posta gönderilemedi")) {
+                successMsg.style.background = "rgba(245, 158, 11, 0.15)";
+                successMsg.style.color = "#fbbf24";
+                successMsg.style.borderColor = "rgba(245, 158, 11, 0.3)";
+                successMsg.textContent = data.message;
+            } else {
+                successMsg.style.background = "rgba(16, 185, 129, 0.15)";
+                successMsg.style.color = "#34d399";
+                successMsg.style.borderColor = "rgba(16, 185, 129, 0.3)";
+                successMsg.textContent = "Yeni doğrulama kodunuz mailinize gönderilmiştir.";
+            }
+            successMsg.style.display = "block";
+            startResendTimer();
+        } else {
+            errorDiv.textContent = data.message;
+            errorDiv.style.display = "block";
+        }
+    } catch (err) {
+        errorDiv.textContent = "Bir hata oluştu, lütfen tekrar deneyin.";
+        errorDiv.style.display = "block";
+    } finally {
+        btn.disabled = false;
+        btn.textContent = originalText;
+    }
+}
+
+function openForgot() {
+    // Adımları sıfırla
+    document.getElementById("forgot-step-1").style.display = "block";
+    document.getElementById("forgot-step-2").style.display = "none";
+    document.getElementById("forgot-step-3").style.display = "none";
+    
+    document.getElementById("forgot-email").value = "";
+    document.getElementById("forgot-code").value = "";
+    document.getElementById("forgot-new-pass").value = "";
+    document.getElementById("forgot-new-pass-confirm").value = "";
+    
+    document.getElementById("forgot-error-1").style.display = "none";
+    document.getElementById("forgot-error-2").style.display = "none";
+    document.getElementById("forgot-error-3").style.display = "none";
+    
+    const successMsg = document.getElementById("forgot-success-msg");
+    successMsg.style.display = "none";
+    successMsg.textContent = "";
+    
+    if (resendTimer) {
+        clearInterval(resendTimer);
+        resendTimer = null;
+    }
+    
+    document.getElementById("forgotModal").style.display = "flex";
+}
+
+function closeForgot() {
+    document.getElementById("forgotModal").style.display = "none";
+    if (resendTimer) {
+        clearInterval(resendTimer);
+        resendTimer = null;
+    }
+}
+
+async function sendResetCode(btn) {
+    const emailInput = document.getElementById("forgot-email");
+    const errorDiv = document.getElementById("forgot-error-1");
+    const successMsg = document.getElementById("forgot-success-msg");
+    const email = emailInput.value.trim();
+    
+    if (!email) {
+        errorDiv.textContent = "Lütfen e-posta adresinizi giriniz.";
+        errorDiv.style.display = "block";
+        return;
+    }
+    
+    btn.disabled = true;
+    const originalText = btn.textContent;
+    btn.textContent = "Gönderiliyor...";
+    errorDiv.style.display = "none";
+    successMsg.style.display = "none";
+    
+    try {
+        const res = await fetch("/forgot-password", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ email: email })
+        });
+        const data = await res.json();
+        
+        if (data.status === "success") {
+            resetEmail = email;
+            if (data.message.includes("E-posta gönderilemedi")) {
+                successMsg.style.background = "rgba(245, 158, 11, 0.15)";
+                successMsg.style.color = "#fbbf24";
+                successMsg.style.borderColor = "rgba(245, 158, 11, 0.3)";
+                successMsg.textContent = data.message;
+            } else {
+                successMsg.style.background = "rgba(16, 185, 129, 0.15)";
+                successMsg.style.color = "#34d399";
+                successMsg.style.borderColor = "rgba(16, 185, 129, 0.3)";
+                successMsg.textContent = "Mailinize doğrulama kodunuz gönderilmiştir.";
+            }
+            successMsg.style.display = "block";
+            document.getElementById("forgot-step-1").style.display = "none";
+            document.getElementById("forgot-step-2").style.display = "block";
+            startResendTimer();
+        } else {
+            errorDiv.textContent = data.message;
+            errorDiv.style.display = "block";
+        }
+    } catch (err) {
+        errorDiv.textContent = "Bir hata oluştu, lütfen tekrar deneyin.";
+        errorDiv.style.display = "block";
+    } finally {
+        btn.disabled = false;
+        btn.textContent = originalText;
+    }
+}
+
+async function verifyResetCode(btn) {
+    const codeInput = document.getElementById("forgot-code");
+    const errorDiv = document.getElementById("forgot-error-2");
+    const successMsg = document.getElementById("forgot-success-msg");
+    const code = codeInput.value.trim();
+    
+    if (!code || code.length !== 6) {
+        errorDiv.textContent = "Lütfen 6 haneli doğrulama kodunu giriniz.";
+        errorDiv.style.display = "block";
+        return;
+    }
+    
+    btn.disabled = true;
+    const originalText = btn.textContent;
+    btn.textContent = "Doğrulanıyor...";
+    errorDiv.style.display = "none";
+    
+    try {
+        const res = await fetch("/verify-reset-code", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ email: resetEmail, code: code })
+        });
+        const data = await res.json();
+        
+        if (data.status === "success") {
+            resetCode = code;
+            successMsg.style.display = "none";
+            document.getElementById("forgot-step-2").style.display = "none";
+            document.getElementById("forgot-step-3").style.display = "block";
+        } else {
+            errorDiv.textContent = data.message;
+            errorDiv.style.display = "block";
+        }
+    } catch (err) {
+        errorDiv.textContent = "Bir hata oluştu, lütfen tekrar deneyin.";
+        errorDiv.style.display = "block";
+    } finally {
+        btn.disabled = false;
+        btn.textContent = originalText;
+    }
+}
+
+function validateRegisterForm(e) {
+    const password = document.getElementById("register-password").value;
+    const errorDiv = document.getElementById("register-error");
+    const hasNumber = /\d/.test(password);
+    
+    if (password.length < 8 || !hasNumber) {
+        errorDiv.textContent = "Şifre en az 8 karakter olmalı ve en az 1 rakam içermelidir.";
+        errorDiv.style.display = "block";
+        e.preventDefault();
+        return false;
+    }
+    errorDiv.style.display = "none";
+    return true;
+}
+
+async function resetPassword(btn) {
+    const passInput = document.getElementById("forgot-new-pass");
+    const confirmInput = document.getElementById("forgot-new-pass-confirm");
+    const errorDiv = document.getElementById("forgot-error-3");
+    
+    const pass = passInput.value;
+    const confirm = confirmInput.value;
+    
+    if (!pass) {
+        errorDiv.textContent = "Lütfen yeni şifrenizi giriniz.";
+        errorDiv.style.display = "block";
+        return;
+    }
+    
+    const hasNumber = /\d/.test(pass);
+    if (pass.length < 8 || !hasNumber) {
+        errorDiv.textContent = "Yeni şifre en az 8 karakter olmalı ve en az 1 rakam içermelidir.";
+        errorDiv.style.display = "block";
+        return;
+    }
+    
+    if (pass !== confirm) {
+        errorDiv.textContent = "Şifreler uyuşmuyor.";
+        errorDiv.style.display = "block";
+        return;
+    }
+    
+    btn.disabled = true;
+    const originalText = btn.textContent;
+    btn.textContent = "Güncelleniyor...";
+    errorDiv.style.display = "none";
+    
+    try {
+        const res = await fetch("/reset-password", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ email: resetEmail, code: resetCode, yeni_sifre: pass })
+        });
+        const data = await res.json();
+        
+        if (data.status === "success") {
+            const successMsg = document.getElementById("forgot-success-msg");
+            successMsg.style.background = "rgba(16, 185, 129, 0.15)";
+            successMsg.style.color = "#34d399";
+            successMsg.style.borderColor = "rgba(16, 185, 129, 0.3)";
+            successMsg.textContent = "Şifreniz başarıyla sıfırlandı! Yeni şifrenizle giriş yapabilirsiniz.";
+            successMsg.style.display = "block";
+            document.getElementById("forgot-step-3").style.display = "none";
+            setTimeout(() => {
+                closeForgot();
+            }, 3000);
+        } else {
+            errorDiv.textContent = data.message;
+            errorDiv.style.display = "block";
+        }
+    } catch (err) {
+        errorDiv.textContent = "Bir hata oluştu, lütfen tekrar deneyin.";
+        errorDiv.style.display = "block";
+    } finally {
+        btn.disabled = false;
+        btn.textContent = originalText;
+    }
+}
+
+function openRegister() {
+
+    document.getElementById("registerModal").style.display = "flex";
+}
+
+function closeRegister() {
+
+    document.getElementById("registerModal").style.display = "none";
+}
+
+
+// mesajı birkaç saniye sonra gizle
+setTimeout(function() {
+
+    let mesaj = document.querySelector(".message");
+
+    if (mesaj) {
+
+        mesaj.style.display = "none";
+    }
+
+}, 3000);
+
+// Slayt geçişlerini yöneten kod
+document.addEventListener("DOMContentLoaded", () => {
+    const slides = document.querySelectorAll(".slideshow-bg .slide");
+    let currentIdx = 0;
+    
+    if (slides.length > 0) {
+        setInterval(() => {
+            const prevIdx = currentIdx;
+            currentIdx = (currentIdx + 1) % slides.length;
+            
+            slides.forEach(slide => {
+                slide.classList.remove("previous");
+            });
+            
+            slides[prevIdx].classList.remove("active");
+            slides[prevIdx].classList.add("previous");
+            
+            slides[currentIdx].classList.add("active");
+        }, 5000); // 5 saniyede bir değiştir
+    }
+});
+</script>
+
+</body>
+</html>

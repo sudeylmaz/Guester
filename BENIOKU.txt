@@ -1,0 +1,32 @@
+# GUESTER - DAVETLİ YÖNETİM VE AKILLI OCR SİSTEMİ
+--------------------------------------------------
+Merhaba Hocam,
+
+Bu projemiz düğün ve organizasyonlar için davetli listelerini yöneten, PDF/Word/Görsel formatındaki listeleri Akıllı OCR (Optik Karakter Tanıma) teknolojisi ile otomatik olarak okuyup sisteme aktaran web tabanlı bir yönetim panelidir.
+
+## Canlı Web Sitesi Adresi:
+👉 https://guester.pythonanywhere.com/
+
+## Proje Geliştiricileri (Öğrenciler):
+- Ceydanur Arslan - 262484066
+- Sude Yılmaz - 262484068
+
+--------------------------------------------------
+## Sistemi Test Etme Adımları:
+
+1. **Giriş Yapın:**
+   Canlı sitemize girin ve "Kayıt Ol" butonunu kullanarak kendi e-postanız ile yeni bir yönetici hesabı oluşturun.
+
+2. **Davetiye Oluşturun:**
+   Giriş yaptıktan sonra "Yeni Davetiye Ekle" diyerek örnek bir davet (Gelin-Damat adı, yer, tarih vb.) oluşturun.
+
+3. **Akıllı OCR Sistemini Test Edin:**
+   Oluşturduğunuz davetiyenin içine girip "Görsel/Dosya Yükle" alanına tıklayın. Test etmeniz için projenin içine koyduğumuz örnek listeleri kullanabilirsiniz:
+   - **`test_files/test2.jpeg`** (Görsel formatında bir davetli listesi)
+   - **`test_files/dugun_davetli_listesi.pdf`** (PDF formatında bir davetli listesi)
+   Bu dosyaları yüklediğinizde, sistem davetli isimlerini ve masa numaralarını otomatik olarak algılayıp listenize ekleyecektir.
+
+4. **Hostes Giriş Linki:**
+   Listenizi oluşturduktan sonra hostesler için bir şifre belirleyin. Sistem size hosteslerin kapıda davetlileri aratıp bulabileceği özel bir giriş linki verecektir.
+
+

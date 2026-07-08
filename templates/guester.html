@@ -1,0 +1,687 @@
+<!--
+Adı Soyadı: Ceydanur Arslan
+Öğrenci Numarası: 262484066
+
+Adı Soyadı: Sude Yılmaz
+Öğrenci Numarası: 262484068
+-->
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GUESTER - Hostes Kontrol Paneli</title>
+    <link rel="icon" type="image/jpeg" href="{{ url_for('static', filename='images/logo.jpeg') }}">
+    <link rel="shortcut icon" type="image/jpeg" href="{{ url_for('static', filename='images/logo.jpeg') }}">
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-gradient: linear-gradient(135deg, #090d16 0%, #0f172a 100%);
+            --text-color: #ffffff;
+            --card-bg: rgba(15, 23, 42, 0.75);
+            --card-border: rgba(255, 255, 255, 0.15);
+            --card-shadow: rgba(0, 0, 0, 0.5);
+            --stat-card-bg: rgba(15, 23, 42, 0.85);
+            --stat-card-border: rgba(255, 255, 255, 0.25);
+            --stat-card-hover-border: rgba(45, 212, 191, 0.5);
+            --stat-label-color: #cbd5e1;
+            --stat-value-color: #ffffff;
+            
+            --search-bg: rgba(30, 41, 59, 0.7);
+            --search-border: rgba(255, 255, 255, 0.15);
+            --search-focus-bg: rgba(15, 23, 42, 0.9);
+            --search-text: #ffffff;
+            
+            --guest-card-bg: rgba(15, 23, 42, 0.8);
+            --guest-card-border: rgba(255, 255, 255, 0.25);
+            --guest-card-shadow: rgba(0, 0, 0, 0.3);
+            --guest-card-hover-border: rgba(45, 212, 191, 0.4);
+            --guest-card-hover-shadow: rgba(0, 0, 0, 0.5);
+            --guest-name-color: #ffffff;
+            
+            --check-btn-not-arrived-bg: rgba(255, 255, 255, 0.1);
+            --check-btn-not-arrived-color: #cbd5e1;
+            --check-btn-not-arrived-border: rgba(255, 255, 255, 0.2);
+            
+            --empty-state-bg: rgba(15, 23, 42, 0.8);
+            --empty-state-text: #cbd5e1;
+            --empty-state-border: rgba(255, 255, 255, 0.15);
+            --empty-state-shadow: rgba(0, 0, 0, 0.4);
+        }
+
+        body.light-theme {
+            --bg-gradient: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);
+            --text-color: #0f172a;
+            --card-bg: rgba(255, 255, 255, 0.85);
+            --card-border: rgba(15, 23, 42, 0.08);
+            --card-shadow: rgba(15, 23, 42, 0.08);
+            --stat-card-bg: rgba(255, 255, 255, 0.95);
+            --stat-card-border: rgba(15, 23, 42, 0.12);
+            --stat-card-hover-border: rgba(124, 58, 237, 0.3);
+            --stat-label-color: #475569;
+            --stat-value-color: #0f172a;
+            
+            --search-bg: rgba(255, 255, 255, 0.9);
+            --search-border: rgba(15, 23, 42, 0.12);
+            --search-focus-bg: #ffffff;
+            --search-text: #0f172a;
+            
+            --guest-card-bg: rgba(255, 255, 255, 0.85);
+            --guest-card-border: rgba(15, 23, 42, 0.08);
+            --guest-card-shadow: rgba(15, 23, 42, 0.04);
+            --guest-card-hover-border: rgba(124, 58, 237, 0.3);
+            --guest-card-hover-shadow: rgba(15, 23, 42, 0.08);
+            --guest-name-color: #0f172a;
+            
+            --check-btn-not-arrived-bg: rgba(15, 23, 42, 0.05);
+            --check-btn-not-arrived-color: #475569;
+            --check-btn-not-arrived-border: rgba(15, 23, 42, 0.1);
+            
+            --empty-state-bg: rgba(255, 255, 255, 0.9);
+            --empty-state-text: #475569;
+            --empty-state-border: rgba(15, 23, 42, 0.1);
+            --empty-state-shadow: rgba(15, 23, 42, 0.06);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Outfit', sans-serif;
+        }
+
+        body, .brand-header, .stat-card, .controls-card, .search-input, .select-input, .guest-card, .check-btn, .empty-state, .table-badge, .guest-name, .stat-label, .stat-value {
+            transition: background 0.3s ease, background-color 0.3s ease, border-color 0.3s ease, color 0.3s ease, box-shadow 0.3s ease, transform 0.2s;
+        }
+
+        body {
+            background: var(--bg-gradient);
+            color: var(--text-color);
+            min-height: 100vh;
+            padding: 20px 10px;
+            overflow-x: hidden;
+        }
+
+        .container {
+            max-width: 650px;
+            margin: 0 auto;
+            position: relative;
+            z-index: 10;
+        }
+
+        /* Header / Logo Section */
+        .brand-header {
+            background: var(--card-bg);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            padding: 20px;
+            text-align: center;
+            box-shadow: 0 10px 30px var(--card-shadow);
+            margin-bottom: 25px;
+            border: 1px solid var(--card-border);
+        }
+
+        .brand-logo {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 10px;
+        }
+
+        .brand-logo img {
+            height: 90px;
+            width: 90px;
+            object-fit: cover;
+            border-radius: 20px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+            margin-bottom: 5px;
+            border: 2px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .brand-title {
+            font-size: 24px;
+            font-weight: 800;
+            color: var(--text-color);
+            letter-spacing: 0.5px;
+        }
+
+        .event-subtitle {
+            font-size: 14px;
+            color: #2dd4bf;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-top: 4px;
+        }
+
+        /* Stats Grid */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+            margin-bottom: 25px;
+        }
+
+        .stat-card {
+            background: var(--stat-card-bg);
+            backdrop-filter: blur(10px);
+            border: 2px solid var(--stat-card-border);
+            border-radius: 20px;
+            padding: 20px;
+            text-align: center;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+        }
+
+        .stat-card:hover {
+            transform: translateY(-2px);
+            border-color: var(--stat-card-hover-border);
+        }
+
+        .stat-label {
+            font-size: 13px;
+            color: var(--stat-label-color);
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: 8px;
+        }
+
+        .stat-value {
+            font-size: 36px;
+            font-weight: 800;
+            color: var(--stat-value-color);
+        }
+
+        .stat-value.primary {
+            color: #2dd4bf;
+            text-shadow: 0 0 15px rgba(45, 212, 191, 0.3);
+        }
+
+        .stat-value.success {
+            color: #34d399;
+            text-shadow: 0 0 15px rgba(52, 211, 153, 0.3);
+        }
+
+        /* Filter Controls */
+        .controls-card {
+            background: var(--card-bg);
+            backdrop-filter: blur(10px);
+            border: 1px solid var(--card-border);
+            border-radius: 20px;
+            padding: 20px;
+            box-shadow: 0 10px 30px var(--card-shadow);
+            margin-bottom: 25px;
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        .search-wrapper {
+            position: relative;
+        }
+
+        .search-input {
+            width: 100%;
+            padding: 14px 20px;
+            background: var(--search-bg);
+            border: 1px solid var(--search-border);
+            border-radius: 12px;
+            color: var(--search-text);
+            font-size: 15px;
+        }
+
+        .search-input:focus {
+            outline: none;
+            border-color: #2dd4bf;
+            background: var(--search-focus-bg);
+            box-shadow: 0 0 0 4px rgba(45, 212, 191, 0.25);
+        }
+
+        .filter-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 12px;
+        }
+
+        .select-input {
+            width: 100%;
+            padding: 12px;
+            background: var(--search-bg);
+            border: 1px solid var(--search-border);
+            border-radius: 12px;
+            color: var(--search-text);
+            font-size: 14px;
+            font-weight: 500;
+            cursor: pointer;
+            outline: none;
+        }
+
+        .select-input option {
+            background: var(--search-focus-bg);
+            color: var(--search-text);
+        }
+
+        .select-input:focus {
+            border-color: #2dd4bf;
+            background: var(--search-focus-bg);
+        }
+
+        /* Guest Card List */
+        .guest-list {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .guest-card {
+            background: var(--guest-card-bg);
+            backdrop-filter: blur(10px);
+            border: 2px solid var(--guest-card-border);
+            border-radius: 18px;
+            padding: 18px 22px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            box-shadow: 0 4px 15px var(--guest-card-shadow);
+        }
+
+        /* Checked-in Card State */
+        .guest-card.is-arrived-card {
+            background: rgba(16, 185, 129, 0.15) !important;
+            border-color: #10b981 !important;
+            box-shadow: 0 4px 20px rgba(16, 185, 129, 0.25) !important;
+        }
+
+        .guest-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px var(--guest-card-hover-shadow);
+            border-color: var(--guest-card-hover-border);
+        }
+
+        .guest-info {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .guest-name {
+            font-weight: 800;
+            font-size: 22px;
+            color: var(--guest-name-color);
+        }
+
+        .guest-meta {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .table-badge {
+            background: rgba(45, 212, 191, 0.15);
+            color: #2dd4bf;
+            border: 1px solid rgba(45, 212, 191, 0.3);
+            padding: 6px 14px;
+            border-radius: 8px;
+            font-weight: 800;
+            font-size: 15px;
+        }
+
+        .status-badge {
+            font-size: 14px;
+            font-weight: 900;
+            padding: 6px 14px;
+            border-radius: 8px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+        .status-badge.geldi {
+            background: rgba(52, 211, 153, 0.15);
+            color: #34d399;
+            border: 1px solid rgba(52, 211, 153, 0.3);
+        }
+        .status-badge.gelmedi {
+            background: rgba(248, 113, 113, 0.15);
+            color: #f87171;
+            border: 1px solid rgba(248, 113, 113, 0.3);
+        }
+
+        /* Check-in Toggle Button */
+        .check-btn {
+            padding: 12px 24px;
+            border: none;
+            border-radius: 12px;
+            font-weight: 800;
+            font-size: 15px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .check-btn.not-arrived {
+            background: var(--check-btn-not-arrived-bg);
+            color: var(--check-btn-not-arrived-color);
+            border: 1px solid var(--check-btn-not-arrived-border);
+        }
+
+        .check-btn.not-arrived:hover {
+            background: rgba(52, 211, 153, 0.2);
+            color: #34d399;
+            border-color: #34d399;
+        }
+
+        .check-btn.arrived {
+            background: #10b981;
+            color: white;
+            box-shadow: 0 4px 12px rgba(16, 185, 129, 0.3);
+        }
+
+        .check-btn.arrived:hover {
+            background: #059669;
+            box-shadow: 0 4px 16px rgba(16, 185, 129, 0.5);
+        }
+
+        .empty-state {
+            background: var(--empty-state-bg);
+            backdrop-filter: blur(10px);
+            border: 1px solid var(--empty-state-border);
+            border-radius: 20px;
+            text-align: center;
+            padding: 50px 20px;
+            color: var(--empty-state-text);
+            box-shadow: 0 10px 30px var(--empty-state-shadow);
+        }
+
+        .empty-icon {
+            font-size: 40px;
+            margin-bottom: 10px;
+        }
+
+        /* Floating Theme Toggle Button Styling */
+        .theme-toggle-btn {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            width: 48px;
+            height: 48px;
+            border-radius: 50%;
+            background: var(--card-bg);
+            border: 1px solid var(--card-border);
+            color: var(--text-color);
+            font-size: 20px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 8px 24px var(--card-shadow);
+            z-index: 1000;
+        }
+        .theme-toggle-btn:hover {
+            transform: scale(1.1);
+        }
+    </style>
+</head>
+<body>
+
+    <button class="theme-toggle-btn" onclick="toggleTheme()" title="Temayı Değiştir">🌓</button>
+    <script>
+        if (localStorage.getItem("guester_theme") === "light") {
+            document.body.classList.add("light-theme");
+        }
+    </script>
+
+    <div class="container">
+        
+        <!-- Header -->
+        <div class="brand-header">
+            <div class="brand-logo">
+                <img src="{{ url_for('static', filename='images/logo.jpeg') }}" alt="Guester Logo">
+            </div>
+            <div class="brand-title">GUESTER</div>
+            <div class="event-subtitle">{{ etkinlik_adi }}</div>
+        </div>
+
+        <!-- Stats Grid -->
+        <div class="stats-grid">
+            <div class="stat-card">
+                <div class="stat-label">Toplam Davetli</div>
+                <div class="stat-value primary" id="toplam-stats">{{ toplam }}</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-label">Giriş Yapanlar</div>
+                <div class="stat-value success" id="gelen-stats">{{ gelen }}</div>
+            </div>
+        </div>
+
+        <!-- Controls Card -->
+        <div class="controls-card">
+            <div class="search-wrapper">
+                <input type="text" id="arama-input" onkeyup="applyFilterAndSort()" class="search-input" placeholder="Davetli ismi yazın... (Biz yazdıkça arar)">
+            </div>
+            <div class="filter-row">
+                <select id="durum-filtresi" onchange="applyFilterAndSort()" class="select-input">
+                    <option value="tumu">Tüm Davetliler</option>
+                    <option value="geldi">Gelenler</option>
+                    <option value="gelmedi">Gelmeyenler</option>
+                </select>
+                <select id="siralama-filtresi" onchange="applyFilterAndSort()" class="select-input">
+                    <option value="az">İsim Sırala (A-Z)</option>
+                    <option value="za">İsim Sırala (Z-A)</option>
+                </select>
+            </div>
+        </div>
+
+        <!-- Guest List Container -->
+        <div class="guest-list" id="guest-list-container">
+            {% for konuk in veri %}
+            <div class="guest-card {% if konuk.durum == 'Geldi' %}is-arrived-card{% endif %}" data-id="{{ konuk.id }}">
+                <div class="guest-info">
+                    <div class="guest-name" style="display: flex; align-items: center; gap: 8px;">
+                        <span class="new-dot" style="display: none; width: 8px; height: 8px; background-color: #22c55e; border-radius: 50%; box-shadow: 0 0 8px #22c55e; transition: opacity 0.3s ease; flex-shrink: 0;"></span>
+                        <span>{{ konuk.isim }}</span>
+                    </div>
+                    <div class="guest-meta">
+                        <span class="table-badge">Masa: {{ konuk.masa }}</span>
+                        <span class="status-badge {% if konuk.durum == 'Geldi' %}geldi{% else %}gelmedi{% endif %}">
+                            {{ konuk.durum }}
+                        </span>
+                    </div>
+                </div>
+                
+                <div>
+                    {% if konuk.durum == 'Geldi' %}
+                    <button type="button" class="check-btn arrived" data-id="{{ konuk.id }}" onclick="toggleDurum(this)">Giriş Yapıldı ✓</button>
+                    {% else %}
+                    <button type="button" class="check-btn not-arrived" data-id="{{ konuk.id }}" onclick="toggleDurum(this)">Giriş Yap</button>
+                    {% endif %}
+                </div>
+            </div>
+            {% else %}
+            <div class="empty-state">
+                <div class="empty-icon">👥</div>
+                <div>Bu davetiyeye kayıtlı henüz konuk bulunmuyor.</div>
+            </div>
+            {% endfor %}
+        </div>
+
+    </div>
+
+    <script>
+        function toggleTheme() {
+            const body = document.body;
+            if (body.classList.contains("light-theme")) {
+                body.classList.remove("light-theme");
+                localStorage.setItem("guester_theme", "dark");
+            } else {
+                body.classList.add("light-theme");
+                localStorage.setItem("guester_theme", "light");
+            }
+        }
+
+        async function toggleDurum(btn) {
+            const id = btn.getAttribute("data-id");
+            try {
+                const response = await fetch(`/guester_durum_degis_ajax/${id}`, {
+                    method: 'POST'
+                });
+                if (response.ok) {
+                    const result = await response.json();
+                    
+                    // İstatistik sayılarını anında güncelle
+                    document.getElementById("gelen-stats").textContent = result.gelen;
+                    document.getElementById("toplam-stats").textContent = result.toplam;
+                    
+                    // Kart içi durumu ve butonu güncelle
+                    const parentCard = btn.closest(".guest-card");
+                    const statusBadge = parentCard.querySelector(".status-badge");
+                    
+                    if (result.status === 'Geldi') {
+                        btn.className = "check-btn arrived";
+                        btn.textContent = "Giriş Yapıldı ✓";
+                        statusBadge.className = "status-badge geldi";
+                        statusBadge.textContent = "Geldi";
+                        parentCard.classList.add("is-arrived-card");
+                    } else {
+                        btn.className = "check-btn not-arrived";
+                        btn.textContent = "Giriş Yap";
+                        statusBadge.className = "status-badge gelmedi";
+                        statusBadge.textContent = "Gelmedi";
+                        parentCard.classList.remove("is-arrived-card");
+                    }
+                    
+                    // Aktif filtre varsa listeyi güncelle
+                    applyFilterAndSort();
+                }
+            } catch (err) {
+                console.error("Durum güncelleme hatası:", err);
+            }
+        }
+
+        function applyFilterAndSort() {
+            const query = document.getElementById("arama-input").value.toLowerCase().trim();
+            const filterVal = document.getElementById("durum-filtresi").value;
+            const sortVal = document.getElementById("siralama-filtresi").value;
+            
+            const listContainer = document.getElementById("guest-list-container");
+            const cards = Array.from(listContainer.getElementsByClassName("guest-card"));
+            
+            if (cards.length === 0) return;
+            
+            cards.forEach(card => {
+                const nameEl = card.querySelector(".guest-name");
+                const statusBadge = card.querySelector(".status-badge");
+                if (!nameEl) return;
+                
+                const name = nameEl.textContent.toLowerCase();
+                const isArrived = statusBadge && statusBadge.classList.contains("geldi");
+                
+                let matchesQuery = name.includes(query);
+                let matchesFilter = true;
+                
+                if (filterVal === 'geldi' && !isArrived) matchesFilter = false;
+                if (filterVal === 'gelmedi' && isArrived) matchesFilter = false;
+                
+                if (matchesQuery && matchesFilter) {
+                    card.style.display = "flex";
+                } else {
+                    card.style.display = "none";
+                }
+            });
+            
+            // Sıralama
+            cards.sort((a, b) => {
+                const nameA = a.querySelector(".guest-name")?.textContent.trim().toLowerCase() || "";
+                const nameB = b.querySelector(".guest-name")?.textContent.trim().toLowerCase() || "";
+                
+                if (sortVal === 'az') {
+                    return nameA.localeCompare(nameB, 'tr');
+                } else {
+                    return nameB.localeCompare(nameA, 'tr');
+                }
+            });
+            
+            // Yeniden yerleştirme
+            cards.forEach(card => listContainer.appendChild(card));
+        }
+
+        // Sayfa ilk yüklendiğinde otomatik olarak A-Z alfabetik sıralamayı ve yeşil nokta yönetimini tetikleyelim
+        window.addEventListener('DOMContentLoaded', () => {
+            applyFilterAndSort();
+
+            // Yeşil Nokta Mantığı
+            const eventSubtitle = document.querySelector(".event-subtitle");
+            if (!eventSubtitle) return;
+
+            // Etkinlik adını benzersiz bir anahtar olarak kullanalım
+            const eventName = eventSubtitle.textContent.trim();
+            const storageKey = "seen_hostes_guests_" + encodeURIComponent(eventName);
+
+            const cards = document.querySelectorAll("#guest-list-container .guest-card");
+            const guestIds = [];
+            cards.forEach(card => {
+                const id = card.getAttribute("data-id");
+                if (id) guestIds.push(id);
+            });
+
+            let seenGuests = JSON.parse(sessionStorage.getItem(storageKey));
+
+            if (seenGuests === null) {
+                // İlk açılışta mevcut olan herkesi görüldü yap
+                seenGuests = guestIds;
+                sessionStorage.setItem(storageKey, JSON.stringify(seenGuests));
+            } else {
+                // Sonraki yüklemelerde yeni eklenen kişilere yeşil nokta koy
+                cards.forEach(card => {
+                    const id = card.getAttribute("data-id");
+                    if (id && !seenGuests.includes(id)) {
+                        const dot = card.querySelector(".new-dot");
+                        if (dot) {
+                            dot.style.display = "inline-block";
+
+                            const clearDot = () => {
+                                dot.style.opacity = "0";
+                                setTimeout(() => {
+                                    dot.style.display = "none";
+                                }, 300);
+
+                                let currentSeen = JSON.parse(sessionStorage.getItem(storageKey)) || [];
+                                if (!currentSeen.includes(id)) {
+                                    currentSeen.push(id);
+                                    sessionStorage.setItem(storageKey, JSON.stringify(currentSeen));
+                                }
+                            };
+
+                            // Fare üzerine geldiğinde veya mobilde parmak dokunduğunda
+                            card.addEventListener("mouseenter", clearDot, { once: true });
+                            card.addEventListener("touchstart", clearDot, { once: true });
+                        }
+                    }
+                });
+            }
+        });
+
+        // Slayt geçişlerini yöneten kod
+        document.addEventListener("DOMContentLoaded", () => {
+            const slides = document.querySelectorAll(".slideshow-bg .slide");
+            let currentIdx = 0;
+            
+            if (slides.length > 0) {
+                setInterval(() => {
+                    const prevIdx = currentIdx;
+                    currentIdx = (currentIdx + 1) % slides.length;
+                    
+                    slides.forEach(slide => {
+                        slide.classList.remove("previous");
+                    });
+                    
+                    slides[prevIdx].classList.remove("active");
+                    slides[prevIdx].classList.add("previous");
+                    
+                    slides[currentIdx].classList.add("active");
+                }, 5000); // 5 saniyede bir değiştir
+            }
+        });
+    </script>
+</body>
+</html>
